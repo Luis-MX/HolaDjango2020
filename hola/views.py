@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import FormArticulo
+from .models import Articulo
 
 
 def def_hola(request):
@@ -38,3 +39,25 @@ def def_articulo(request):
 
     form = FormArticulo()
     return render(request, 'articulo.html', {'form':form})
+
+def def_articulos(request):
+    articulos = Articulo.objects.all()
+    return render(request, 'articulos.html', {'articulos':articulos})
+
+def def_articulo_eliminar(request, id):
+    articulo = Articulo.objects.get(pk=id)
+    articulo.delete()
+    return redirect('articulos')
+
+def def_articulo_editar(request, id):
+    articulo = Articulo.objects.get(pk=id)
+
+    if request.method == 'POST':
+        form = FormArticulo(request.POST)
+        if form.is_valid():
+            form.save()
+        
+        return render(request, 'articulo.html', {'form':form})
+
+    form = FormArticulo(instance=articulo)
+    return render(request, 'articulo.html', {'form':form,'editar':True})

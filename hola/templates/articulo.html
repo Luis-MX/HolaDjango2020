@@ -11,6 +11,8 @@
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit">Agregar</button>
+        <a href="{% url 'articulos' %}">Cancelar</a>
+
     </form>
     
 </body>
